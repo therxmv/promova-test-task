@@ -1,7 +1,7 @@
 package com.therxmv.promovatest
 
 import android.app.Application
-import com.therxmv.promovatest.di.appModule
+import com.therxmv.promovatest.di.appModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -16,7 +16,7 @@ class PromovaApplication : Application() {
     private fun initializeKoin() {
         startKoin {
             androidContext(this@PromovaApplication)
-            modules(appModule)
+            modules(appModules)
         }
     }
 }

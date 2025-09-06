@@ -5,6 +5,11 @@ import com.therxmv.featuremovies.data.di.moviesDataModule
 import com.therxmv.featuremovies.ui.di.moviesUiModule
 import org.koin.dsl.module
 
-val appModule = module {
-    includes(networkModule, moviesDataModule, moviesUiModule)
+val appModules = module {
+    includes(
+        networkModule,
+        navigationModule,
+        moviesDataModule,
+        moviesUiModule,
+    )
 }

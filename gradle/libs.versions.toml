@@ -41,7 +41,6 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 
 # ViewModel
 viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
-viewmodel-nav3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "viewmodelNav3" }
 
 # Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -52,6 +51,7 @@ compose-material3 = { module = "androidx.compose.material3:material3" }
 # Nav3
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+viewmodel-nav3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "viewmodelNav3" }
 
 # Room
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -98,12 +98,12 @@ compose = [
 
 viewModel = [
     "viewmodel-compose",
-    "viewmodel-nav3",
 ]
 
 navigation3 = [
     "navigation3-runtime",
     "navigation3-ui",
+    "viewmodel-nav3",
 ]
 
 room = [

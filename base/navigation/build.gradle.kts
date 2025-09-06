@@ -2,10 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.therxmv.featuremovies.ui"
+    namespace = "com.therxmv.base.navigation"
     compileSdk = libs.versions.project.targetSdk.get().toInt()
 
     defaultConfig {
@@ -23,15 +24,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature-movies:domain"))
-    implementation(project(":base:ui"))
-    implementation(project(":base:navigation"))
-
-    implementation(libs.bundles.koin)
-
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-    implementation(libs.paging.compose)
 
-    implementation(libs.bundles.viewModel)
+    api(libs.bundles.navigation3)
 }

@@ -28,4 +28,5 @@ include(
     ":base:network",
     ":base:ui",
     ":base:date",
+    ":base:navigation",
 )

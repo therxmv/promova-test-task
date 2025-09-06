@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.therxmv.base.ui.theme.PromovaTheme
-import com.therxmv.featuremovies.ui.content.MoviesScreen
+import com.therxmv.promovatest.ui.NavigationContent
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             PromovaTheme {
-                MoviesScreen()
+                NavigationContent()
             }
         }
     }

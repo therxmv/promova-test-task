@@ -36,6 +36,7 @@ android {
 dependencies {
     implementation(project(":base:ui"))
     implementation(project(":base:network"))
+    implementation(project(":base:navigation"))
     implementation(project(":feature-movies:data"))
     implementation(project(":feature-movies:ui"))
 
