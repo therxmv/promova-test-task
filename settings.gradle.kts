@@ -20,4 +20,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "PromovaTest"
-include(":app")
+include(
+    ":app",
+    "feature-movies:data",
+    "feature-movies:domain",
+    "feature-movies:ui",
+)
