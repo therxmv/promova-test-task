@@ -25,4 +25,5 @@ include(
     "feature-movies:data",
     "feature-movies:domain",
     "feature-movies:ui",
+    "base:network"
 )

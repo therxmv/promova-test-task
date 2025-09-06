@@ -89,7 +89,6 @@ navigation3 = [
 ]
 
 room = [
-    "room-compiler",
     "room-runtime",
     "room-paging",
 ]

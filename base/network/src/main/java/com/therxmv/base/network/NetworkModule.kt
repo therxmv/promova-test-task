@@ -1,0 +1,32 @@
+package com.therxmv.base.network
+
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import org.koin.dsl.module
+
+val networkModule = module {
+    single {
+        HttpClient(OkHttp) {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = false
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                        encodeDefaults = true
+                    }
+                )
+            }
+
+            install(HttpTimeout) {
+                requestTimeoutMillis = 5_000
+                connectTimeoutMillis = 5_000
+                socketTimeoutMillis = 5_000
+            }
+        }
+    }
+}

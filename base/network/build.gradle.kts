@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.therxmv.featuremovies.domain"
+    namespace = "com.therxmv.base.network"
     compileSdk = libs.versions.project.targetSdk.get().toInt()
 
     defaultConfig {
@@ -18,5 +18,6 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.koin.core)
+    api(libs.bundles.ktor)
 }
