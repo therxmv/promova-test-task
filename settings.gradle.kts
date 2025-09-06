@@ -22,9 +22,10 @@ dependencyResolutionManagement {
 rootProject.name = "PromovaTest"
 include(
     ":app",
-    "feature-movies:data",
-    "feature-movies:domain",
-    "feature-movies:ui",
-    "base:network"
+    ":feature-movies:data",
+    ":feature-movies:domain",
+    ":feature-movies:ui",
+    ":base:network",
+    ":base:ui",
+    ":base:date",
 )
-include(":base:ui")

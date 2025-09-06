@@ -37,8 +37,9 @@ room {
 dependencies {
     implementation(project(":feature-movies:domain"))
     implementation(project(":base:network"))
+    implementation(project(":base:date"))
 
-    implementation(libs.bundles.koin)
+    implementation(libs.koin.core)
 
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)

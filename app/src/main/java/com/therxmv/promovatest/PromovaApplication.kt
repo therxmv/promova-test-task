@@ -1,8 +1,7 @@
 package com.therxmv.promovatest
 
 import android.app.Application
-import com.therxmv.base.network.networkModule
-import com.therxmv.featuremovies.data.moviesDataModule
+import com.therxmv.promovatest.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -17,8 +16,7 @@ class PromovaApplication : Application() {
     private fun initializeKoin() {
         startKoin {
             androidContext(this@PromovaApplication)
-
-            modules(networkModule, moviesDataModule)
+            modules(appModule)
         }
     }
 }

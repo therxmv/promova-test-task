@@ -22,6 +22,7 @@ class MoviesRemoteMediator(
     }
 
     private val moviesDao = moviesDatabase.getMoviesDao()
+    private val moviePageDao = moviesDatabase.getMoviePageDao()
 
     override suspend fun load(
         loadType: LoadType,
@@ -39,12 +40,15 @@ class MoviesRemoteMediator(
             val response = moviesNetworkApi.getMoviesByPage(page)
 
             val entities = movieConverter.dtoToEntity(response.results)
+            val keys = movieConverter.responseToKeyEntity(response)
 
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
+                    moviePageDao.deleteKeys()
                     moviesDao.deleteMovies()
                 }
 
+                moviePageDao.insertKeys(keys)
                 moviesDao.insertMovies(entities)
             }
 
@@ -61,9 +65,11 @@ class MoviesRemoteMediator(
             MediatorResult.Error(this)
         }
 
-    private fun PagingState<Int, MovieEntity>.resolveNextPage(): Int =
-        anchorPosition?.let { anchor ->
-            val page = closestPageToPosition(anchor)
-            page?.prevKey?.plus(1) ?: page?.nextKey?.minus(1)
-        } ?: INITIAL_PAGE.plus(1)
+    private suspend fun PagingState<Int, MovieEntity>.resolveNextPage(): Int {
+        val nextKey = lastItemOrNull()?.let { item ->
+            moviePageDao.selectKeyById(item.id)
+        }?.nextPage
+
+        return nextKey ?: (INITIAL_PAGE + 1)
+    }
 }

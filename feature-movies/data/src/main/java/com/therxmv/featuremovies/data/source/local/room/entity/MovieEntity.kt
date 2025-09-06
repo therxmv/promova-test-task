@@ -10,6 +10,6 @@ data class MovieEntity(
     @ColumnInfo("title") val title: String,
     @ColumnInfo("overview") val overview: String,
     @ColumnInfo("poster_path") val posterPath: String,
-    @ColumnInfo("release_date") val releaseDate: String,
+    @ColumnInfo("release_date_millis") val releaseDateMillis: Long,
     @ColumnInfo("average_vote") val averageVote: Float,
 )

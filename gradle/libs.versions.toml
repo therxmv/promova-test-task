@@ -22,8 +22,9 @@ composeBom = "2025.08.01"
 navigation3 = "1.0.0-alpha08"
 room = "2.7.2"
 ktor = "3.2.3"
-koin = "4.1.0"
+koin = "4.1.1"
 paging = "3.3.6"
+datetime = "0.6.2"
 
 junit = "4.13.2"
 mockk = "1.14.5"
@@ -65,11 +66,13 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 
 # Koin
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 # Paging
 paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 paging-compose = { module = "androidx.paging:paging-compose-android", version.ref = "paging" }
+
+kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 
 # Unit Tests
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -117,7 +120,7 @@ ktor = [
 
 koin = [
     "koin-core",
-    "koin-android",
+    "koin-compose",
 ]
 
 test-unit = [

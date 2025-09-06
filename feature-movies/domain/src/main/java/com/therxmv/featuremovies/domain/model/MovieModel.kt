@@ -5,7 +5,7 @@ data class MovieModel(
     val title: String,
     val overview: String,
     val posterUrl: String,
-    val releaseDate: String, // TODO datetime
+    val releaseDateMillis: Long,
     val averageVote: Float,
 //    val isFavorite: Boolean = false, // TODO implement
 )

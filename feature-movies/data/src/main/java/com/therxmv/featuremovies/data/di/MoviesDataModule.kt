@@ -1,4 +1,4 @@
-package com.therxmv.featuremovies.data
+package com.therxmv.featuremovies.data.di
 
 import android.content.Context
 import androidx.room.Room

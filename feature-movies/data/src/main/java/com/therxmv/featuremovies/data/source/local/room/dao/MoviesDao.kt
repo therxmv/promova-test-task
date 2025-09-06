@@ -10,7 +10,7 @@ import com.therxmv.featuremovies.data.source.local.room.entity.MovieEntity
 @Dao
 interface MoviesDao {
 
-    @Query("SELECT * FROM MoviesTable")
+    @Query("SELECT * FROM MoviesTable ORDER BY release_date_millis DESC")
     fun pagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM MoviesTable")

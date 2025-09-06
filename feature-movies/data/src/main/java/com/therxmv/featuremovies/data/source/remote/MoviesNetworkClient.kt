@@ -8,8 +8,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.url
-import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.request
 
 class MoviesNetworkClient(
     private val httpClient: HttpClient,
@@ -42,9 +40,6 @@ class MoviesNetworkClient(
                 parameter(VOTE_AVERAGE_GTE, minAverageVote)
                 parameter(VOTE_COUNT_GTE, minVoteCount)
             }
-            .also { println(it.request.url.toString()) }
-            .also { println(it.request.headers.toString()) }
-            .also { println(it.bodyAsText()) }
             .body<MoviesResponse>()
     }
 }

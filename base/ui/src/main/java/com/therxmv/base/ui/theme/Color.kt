@@ -1,4 +1,4 @@
-package com.therxmv.promovatest.ui.theme
+package com.therxmv.base.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF88521C)
