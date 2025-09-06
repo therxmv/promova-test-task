@@ -18,5 +18,6 @@ android {
 }
 
 dependencies {
-
+    api(libs.bundles.coroutines)
+    api(libs.paging.common)
 }

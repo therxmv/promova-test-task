@@ -15,6 +15,7 @@ ksp = "2.2.0-2.0.2"
 # Libs
 coreKtx = "1.17.0"
 activityCompose = "1.10.1"
+coroutines = "1.10.2"
 viewmodel = "2.9.3"
 viewmodelNav3 = "1.0.0-alpha04"
 composeBom = "2025.08.01"
@@ -22,6 +23,7 @@ navigation3 = "1.0.0-alpha08"
 room = "2.7.2"
 ktor = "3.2.3"
 koin = "4.1.0"
+paging = "3.3.6"
 
 junit = "4.13.2"
 mockk = "1.14.5"
@@ -31,6 +33,10 @@ kotest = "6.0.2"
 # AndroidX
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+
+# Coroutines
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 
 # ViewModel
 viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
@@ -61,6 +67,10 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
+# Paging
+paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
+paging-compose = { module = "androidx.paging:paging-compose-android", version.ref = "paging" }
+
 # Unit Tests
 junit = { module = "junit:junit", version.ref = "junit" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
@@ -70,6 +80,11 @@ kotest = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 androidx-core = [
     "androidx-core-ktx",
     "androidx-activity-compose",
+]
+
+coroutines = [
+    "coroutines-core",
+    "coroutines-android",
 ]
 
 compose = [

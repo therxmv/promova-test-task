@@ -27,3 +27,4 @@ include(
     "feature-movies:ui",
     "base:network"
 )
+include(":base:ui")
