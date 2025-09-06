@@ -2,55 +2,47 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
-    namespace = "com.therxmv.promovatest"
-    compileSdk = 36
+    namespace = libs.versions.project.applicationId.get()
+    compileSdk = libs.versions.project.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.therxmv.promovatest"
-        minSdk = 24
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        applicationId = libs.versions.project.applicationId.get()
+        minSdk = libs.versions.project.minSdk.get().toInt()
+        targetSdk = libs.versions.project.targetSdk.get().toInt()
+        versionCode = libs.versions.project.versionCode.get().toInt()
+        versionName = libs.versions.project.versionName.get()
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = false // TODO minify
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         compose = true
     }
 }
 
-dependencies {
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+dependencies {
+    implementation(libs.bundles.androidx.core)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+
+    testImplementation(libs.bundles.test.unit)
 }

@@ -1,4 +1,4 @@
-package com.therxmv.promovatest
+package com.therxmv.promovatest.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,14 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.therxmv.promovatest.ui.theme.PromovaTestTheme
+import com.therxmv.promovatest.ui.theme.PromovaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
+
         setContent {
-            PromovaTestTheme {
+            PromovaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -41,7 +42,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    PromovaTestTheme {
+    PromovaTheme {
         Greeting("Android")
     }
 }
