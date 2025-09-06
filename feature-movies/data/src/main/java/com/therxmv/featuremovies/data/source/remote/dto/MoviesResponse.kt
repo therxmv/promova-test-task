@@ -16,5 +16,5 @@ data class MovieResponse(
     @SerialName("overview") val overview: String,
     @SerialName("poster_path") val posterPath: String,
     @SerialName("release_date") val releaseDate: String,
-    @SerialName("vote_average") val voteAverage: Float,
+    @SerialName("vote_average") val averageVote: Float,
 )

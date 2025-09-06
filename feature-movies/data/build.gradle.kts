@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
@@ -28,6 +30,10 @@ android {
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     implementation(project(":feature-movies:domain"))
     implementation(project(":base:network"))
@@ -35,8 +41,7 @@ dependencies {
     implementation(libs.bundles.koin)
 
     implementation(libs.bundles.room)
-    implementation(libs.bundles.ktor)
-    implementation(libs.bundles.koin)
+    ksp(libs.room.compiler)
 
     testImplementation(libs.bundles.test.unit)
 }

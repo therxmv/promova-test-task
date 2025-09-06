@@ -10,12 +10,4 @@ local.properties
 captures
 .externalNativeBuild
 .cxx
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcodeproj/project.xcworkspace/
-!*.xcworkspace/contents.xcworkspacedata
-**/xcshareddata/WorkspaceSettings.xcsettings
-/shared/schemas/com.therxmv.plantintest.data.source.local.room.CharactersDatabase/1.json
-/shared/schemas/com.therxmv.plantintest.rickandmorty.data.source.local.room.RickAndMortyDatabase/1.json
-/composeApp/release/
+**/schemas/
