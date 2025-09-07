@@ -30,7 +30,7 @@ fun ErrorContainer(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(PromovaTheme.paddings.main),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -42,7 +42,7 @@ fun ErrorContainer(
         )
 
         if (onRetry != null) {
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(PromovaTheme.paddings.main))
 
             RetryButton(onClick = onRetry)
         }

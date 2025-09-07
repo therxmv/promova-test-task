@@ -22,7 +22,6 @@ import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiState
 import com.therxmv.featuremovies.ui.viewmodel.state.UiMovieItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -49,7 +48,6 @@ class MoviesViewModel(
     private val _uiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Idle)
     val uiState = _uiState.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     val moviesFlow: Flow<PagingData<UiMovieItem>> = getMoviesPagerFlow()
         .cachedIn(viewModelScope)
         .combine(getFavoriteMoviesFlow()) { data, favorites ->
@@ -74,8 +72,8 @@ class MoviesViewModel(
         )
 
     init {
-        loadData()
         observeConnection()
+        loadData()
     }
 
     fun onEvent(event: MoviesUiEvent) {
@@ -140,10 +138,6 @@ class MoviesViewModel(
 
     private fun MovieModel.getMovieActions(): List<UiMovieItem.Movie.Action> =
         listOf(
-//            UiMovieItem.Movie.Action( // TODO
-//                icon = Icons.Default.Share,
-//                event = MoviesUiEvent,
-//            ),
             UiMovieItem.Movie.Action(
                 icon = Icons.Default.Star,
                 isEnabled = isFavorite,

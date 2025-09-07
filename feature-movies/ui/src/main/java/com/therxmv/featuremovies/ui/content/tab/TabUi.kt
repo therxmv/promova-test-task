@@ -46,7 +46,7 @@ internal fun MovieItem(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .clip(MaterialTheme.shapes.medium)
+            .clip(PromovaTheme.shapes.mainShape)
             .background(MaterialTheme.colorScheme.primaryContainer),
     ) {
         Box {
@@ -100,13 +100,11 @@ private fun ActionIcon(
     data: UiMovieItem.Movie.Action,
     onClick: () -> Unit,
 ) {
-    val colors = if (data.isEnabled) {
-        IconButtonDefaults.filledIconButtonColors()
-    } else {
-        IconButtonDefaults.filledIconButtonColors().copy(
-            containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-        )
-    }
+    val colors = IconButtonDefaults.filledIconButtonColors().copy(
+        containerColor = MaterialTheme.colorScheme.primary.copy(
+            alpha = if (data.isEnabled) 1f else 0.4f
+        ),
+    )
 
     FilledIconButton(
         onClick = onClick,

@@ -13,7 +13,7 @@ class MoviesNetworkClient(
     private val httpClient: HttpClient,
 ) : MoviesNetworkApi {
 
-    companion object { // TODO make provider if time allows
+    companion object {
         private const val BASE_URL = "https://api.themoviedb.org"
         private const val MOVIES_PATH = "/3/discover/movie"
 
@@ -27,7 +27,7 @@ class MoviesNetworkClient(
     }
 
     override suspend fun getMoviesByPage(page: Int): MoviesResponse {
-        val sortBy = "primary_release_date.desc" // TODO make filters if time allows
+        val sortBy = "primary_release_date.desc"
         val minAverageVote = 7
         val minVoteCount = 100
 

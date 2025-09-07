@@ -24,6 +24,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.koin.core)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
 

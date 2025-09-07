@@ -44,7 +44,7 @@ internal fun AllMoviesTab(
             verticalArrangement = Arrangement.spacedBy(PromovaTheme.paddings.main),
             contentPadding = PaddingValues(PromovaTheme.paddings.main)
         ) {
-            if (data.isConnected.not()) {
+            if (data.isConnected.not() && pagingItems.itemCount != 0) {
                 item {
                     TextPlaceholder(data.noInternetText)
                 }
