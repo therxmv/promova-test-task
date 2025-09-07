@@ -4,6 +4,7 @@ import com.therxmv.base.date.toLocalDate
 import com.therxmv.base.date.toMilliseconds
 import com.therxmv.featuremovies.data.source.local.room.entity.MovieEntity
 import com.therxmv.featuremovies.data.source.local.room.entity.MoviePageEntity
+import com.therxmv.featuremovies.data.source.paging.MoviesRemoteMediator.Companion.INITIAL_PAGE
 import com.therxmv.featuremovies.data.source.remote.dto.MovieDto
 import com.therxmv.featuremovies.data.source.remote.dto.MoviesResponse
 import com.therxmv.featuremovies.domain.model.MovieModel
@@ -40,9 +41,9 @@ class MovieConverter(
             }
         }
 
-    fun responseToKeyEntity(response: MoviesResponse): List<MoviePageEntity> {
+    fun responseToPageEntity(response: MoviesResponse): List<MoviePageEntity> {
         val nextPage = response.page.plus(1).takeIf { it <= response.totalPages }
-        val prevPage = response.page.minus(1).takeIf { it >= 0 }
+        val prevPage = response.page.minus(1).takeIf { it >= INITIAL_PAGE }
 
         return response.results.map { movie ->
             MoviePageEntity(

@@ -21,7 +21,7 @@ class MoviesRemoteMediator(
 ) : RemoteMediator<Int, MovieEntity>() {
 
     companion object {
-        private const val INITIAL_PAGE = 1
+        internal const val INITIAL_PAGE = 1
     }
 
     private val moviesDao = moviesDatabase.getMoviesDao()
@@ -46,7 +46,7 @@ class MoviesRemoteMediator(
                 movieConverter.dtoToEntity(response.results)
             }
             val keys = withContext(defaultDispatcher) {
-                movieConverter.responseToKeyEntity(response)
+                movieConverter.responseToPageEntity(response)
             }
 
             moviesDatabase.withTransaction {

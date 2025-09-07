@@ -81,6 +81,7 @@ coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = 
 junit = { module = "junit:junit", version.ref = "junit" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotest = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 [bundles]
 androidx-core = [
@@ -135,6 +136,7 @@ test-unit = [
     "junit",
     "mockk",
     "kotest",
+    "coroutines-test",
 ]
 
 [plugins]
