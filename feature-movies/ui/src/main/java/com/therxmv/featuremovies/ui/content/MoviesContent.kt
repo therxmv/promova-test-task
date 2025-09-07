@@ -50,7 +50,7 @@ internal fun MoviesContent(
             pagerState = pagerState,
             pagingMovies = pagingMovies,
             favoriteMovies = favoriteMovies,
-            tabs = data.tabs,
+            data = data,
             onEvent = onEvent,
         )
     }
@@ -61,21 +61,23 @@ private fun PagerTabContent(
     pagerState: PagerState,
     pagingMovies: LazyPagingItems<UiMovieItem>,
     favoriteMovies: StateFlow<List<UiMovieItem>>,
-    tabs: List<MoviesUiData.Tab>,
+    data: MoviesUiData,
     onEvent: (MoviesUiEvent) -> Unit,
 ) {
     HorizontalPager(
         modifier = Modifier.fillMaxSize(),
         state = pagerState,
     ) { index ->
-        when (tabs[index]) {
+        when (data.tabs[index]) {
             is MoviesUiData.Tab.All -> AllMoviesTab(
                 pagingItems = pagingMovies,
+                emptyText = data.emptyText,
                 onEvent = onEvent,
             )
 
             is MoviesUiData.Tab.Favorite -> FavoriteMoviesTab(
                 favoriteMovies = favoriteMovies,
+                emptyText = data.noLikesText,
                 onEvent = onEvent,
             )
         }

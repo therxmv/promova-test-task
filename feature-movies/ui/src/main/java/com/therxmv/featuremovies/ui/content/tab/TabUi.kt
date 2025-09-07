@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
@@ -191,9 +192,20 @@ internal fun DateSeparator(
     )
 }
 
+@Composable
+internal fun EmptyPlaceholder(text: String) {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = text,
+        style = MaterialTheme.typography.headlineSmall,
+        textAlign = TextAlign.Center,
+        color = MaterialTheme.colorScheme.onSurface,
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
-private fun MovieItemBigPreview() {
+private fun MovieItemPreview() {
     PromovaTheme {
         MovieItem(
             data = UiMovieItem.Movie(
@@ -218,26 +230,9 @@ private fun MovieItemBigPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun MovieItemSmallPreview() {
+private fun EmptyPlaceholderPreview() {
     PromovaTheme {
-        MovieItem(
-            data = UiMovieItem.Movie(
-                id = 0,
-                title = "Top Gun",
-                description = LoremIpsum(5).values.joinToString(),
-                posterUrl = "url",
-                averageScore = "4.8",
-                releaseDate = "Jun 2025",
-                actions = listOf(
-                    UiMovieItem.Movie.Action(
-                        icon = Icons.Default.Star,
-                        isEnabled = false,
-                        event = MoviesUiEvent.ToggleFavoriteMovie(0, false),
-                    ),
-                ),
-            ),
-            onEvent = {},
-        )
+        EmptyPlaceholder("There are no items to display!")
     }
 }
 

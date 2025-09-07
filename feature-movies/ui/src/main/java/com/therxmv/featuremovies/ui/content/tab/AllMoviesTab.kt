@@ -21,6 +21,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.therxmv.base.ui.state.ErrorContainer
 import com.therxmv.base.ui.state.LoadingContainer
 import com.therxmv.base.ui.theme.PromovaTheme
 import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiEvent
@@ -30,6 +31,7 @@ import com.therxmv.featuremovies.ui.viewmodel.state.UiMovieItem
 @Composable
 internal fun AllMoviesTab(
     pagingItems: LazyPagingItems<UiMovieItem>,
+    emptyText: String,
     onEvent: (MoviesUiEvent) -> Unit,
 ) {
     PullToRefreshBox(
@@ -41,6 +43,13 @@ internal fun AllMoviesTab(
             verticalArrangement = Arrangement.spacedBy(PromovaTheme.paddings.main),
             contentPadding = PaddingValues(PromovaTheme.paddings.main)
         ) {
+            handleRefreshPagingState(
+                state = pagingItems.loadState.refresh,
+                isEmpty = pagingItems.itemCount == 0,
+                emptyText = emptyText,
+                onRetry = pagingItems::retry,
+            )
+
             items(
                 count = pagingItems.itemCount,
                 key = pagingItems.itemKey { it.id },
@@ -63,6 +72,23 @@ internal fun AllMoviesTab(
             }
 
             handleLoadingPagingState(pagingItems.loadState.append)
+        }
+    }
+}
+
+internal fun LazyListScope.handleRefreshPagingState(
+    state: LoadState,
+    isEmpty: Boolean,
+    emptyText: String,
+    onRetry: () -> Unit,
+) {
+    when {
+        state is LoadState.NotLoading && isEmpty -> item {
+            EmptyPlaceholder(emptyText)
+        }
+
+        state is LoadState.Error -> item {
+            ErrorContainer(onRetry = onRetry)
         }
     }
 }

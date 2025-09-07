@@ -79,6 +79,8 @@ class MoviesViewModel(
             MoviesUiState.Ready(
                 data = MoviesUiData(
                     tabs = createTabs(),
+                    emptyText = "There are no items to display!",
+                    noLikesText = "You haven't liked any movie yet",
                 ),
             )
         }

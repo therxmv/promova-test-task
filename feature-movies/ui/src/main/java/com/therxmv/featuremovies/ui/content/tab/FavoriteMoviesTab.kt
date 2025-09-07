@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 internal fun FavoriteMoviesTab(
     favoriteMovies: StateFlow<List<UiMovieItem>>,
+    emptyText: String,
     onEvent: (MoviesUiEvent) -> Unit,
 ) {
     val movies by favoriteMovies.collectAsState()
@@ -26,6 +27,12 @@ internal fun FavoriteMoviesTab(
         verticalArrangement = Arrangement.spacedBy(PromovaTheme.paddings.main),
         contentPadding = PaddingValues(PromovaTheme.paddings.main)
     ) {
+        if (movies.isEmpty()) {
+            item {
+                EmptyPlaceholder(emptyText)
+            }
+        }
+
         items(
             items = movies,
             key = { it.id },

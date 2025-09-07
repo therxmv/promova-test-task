@@ -42,11 +42,9 @@ class MoviesRepositoryImpl(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFavoriteMoviesFlow(): Flow<List<MovieModel>> =
-        favoriteMoviesDao.selectFavoriteMovies()
+        favoriteMoviesDao.selectFavoriteMoviesEntities()
             .mapLatest { list ->
-                val ids = list.map { it.movieId }
-
-                moviesDao.selectMoviesByIds(ids).map { entity ->
+                list.map { entity ->
                     movieConverter.entityToModel(entity = entity, isFavorite = true)
                 }
             }

@@ -6,6 +6,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Immutable
 data class MoviesUiData(
     val tabs: List<Tab>,
+    val emptyText: String,
+    val noLikesText: String,
 ) {
     sealed interface Tab {
         val label: String
