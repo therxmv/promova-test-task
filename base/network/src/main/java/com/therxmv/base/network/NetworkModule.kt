@@ -1,11 +1,14 @@
 package com.therxmv.base.network
 
+import android.content.Context
+import android.net.ConnectivityManager
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val networkModule = module {
@@ -29,4 +32,10 @@ val networkModule = module {
             }
         }
     }
+
+    single<ConnectivityManager> {
+        get<Context>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
+    singleOf(::ConnectivityObserver)
 }

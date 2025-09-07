@@ -71,7 +71,7 @@ private fun PagerTabContent(
         when (data.tabs[index]) {
             is MoviesUiData.Tab.All -> AllMoviesTab(
                 pagingItems = pagingMovies,
-                emptyText = data.emptyText,
+                data = data,
                 onEvent = onEvent,
             )
 

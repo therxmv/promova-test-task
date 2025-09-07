@@ -8,6 +8,8 @@ data class MoviesUiData(
     val tabs: List<Tab>,
     val emptyText: String,
     val noLikesText: String,
+    val noInternetText: String,
+    val isConnected: Boolean = true,
 ) {
     sealed interface Tab {
         val label: String

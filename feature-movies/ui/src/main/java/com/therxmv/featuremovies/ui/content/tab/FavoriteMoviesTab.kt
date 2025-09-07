@@ -29,7 +29,7 @@ internal fun FavoriteMoviesTab(
     ) {
         if (movies.isEmpty()) {
             item {
-                EmptyPlaceholder(emptyText)
+                TextPlaceholder(emptyText)
             }
         }
 

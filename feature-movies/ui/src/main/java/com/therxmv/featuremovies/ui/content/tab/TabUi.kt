@@ -193,7 +193,7 @@ internal fun DateSeparator(
 }
 
 @Composable
-internal fun EmptyPlaceholder(text: String) {
+internal fun TextPlaceholder(text: String) {
     Text(
         modifier = Modifier.fillMaxWidth(),
         text = text,
@@ -232,7 +232,7 @@ private fun MovieItemPreview() {
 @Composable
 private fun EmptyPlaceholderPreview() {
     PromovaTheme {
-        EmptyPlaceholder("There are no items to display!")
+        TextPlaceholder("There are no items to display!")
     }
 }
 

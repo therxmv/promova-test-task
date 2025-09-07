@@ -60,7 +60,7 @@ class MoviesRemoteMediator(
 
     private suspend fun Exception.fallbackToLocalOrReturnError(): MediatorResult =
         if (moviesDao.getCount() > 0) {
-            MediatorResult.Success(endOfPaginationReached = true) // TODO maybe false
+            MediatorResult.Success(endOfPaginationReached = true)
         } else {
             MediatorResult.Error(this)
         }

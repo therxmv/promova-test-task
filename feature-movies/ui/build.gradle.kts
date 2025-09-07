@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":base:ui"))
     implementation(project(":base:date"))
     implementation(project(":base:navigation"))
+    implementation(project(":base:network"))
 
     implementation(libs.bundles.koin)
 

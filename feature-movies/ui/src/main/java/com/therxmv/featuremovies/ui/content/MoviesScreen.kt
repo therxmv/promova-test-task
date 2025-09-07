@@ -1,7 +1,7 @@
 package com.therxmv.featuremovies.ui.content
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.collectAsState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.therxmv.base.ui.state.ErrorContainer
 import com.therxmv.base.ui.state.LoadingContainer
@@ -13,7 +13,7 @@ import org.koin.androidx.compose.koinViewModel
 fun MoviesScreen(
     viewModel: MoviesViewModel = koinViewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val uiState = viewModel.uiState.collectAsState().value
     val pagingMovies = viewModel.moviesFlow.collectAsLazyPagingItems()
 
     when (uiState) {

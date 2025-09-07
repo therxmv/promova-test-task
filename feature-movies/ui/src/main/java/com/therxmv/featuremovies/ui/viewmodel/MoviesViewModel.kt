@@ -10,6 +10,7 @@ import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.therxmv.base.date.formatToMonthAndYear
+import com.therxmv.base.network.ConnectivityObserver
 import com.therxmv.featuremovies.domain.model.MovieModel
 import com.therxmv.featuremovies.domain.usecase.AddFavoriteMovieUseCase
 import com.therxmv.featuremovies.domain.usecase.GetFavoriteMoviesFlowUseCase
@@ -24,7 +25,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -35,6 +38,7 @@ class MoviesViewModel(
     getFavoriteMoviesFlow: GetFavoriteMoviesFlowUseCase,
     private val addFavoriteMovie: AddFavoriteMovieUseCase,
     private val removeFavoriteMovie: RemoveFavoriteMovieUseCase,
+    private val connectivityObserver: ConnectivityObserver,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Idle)
@@ -66,6 +70,7 @@ class MoviesViewModel(
 
     init {
         loadData()
+        observeConnection()
     }
 
     fun onEvent(event: MoviesUiEvent) {
@@ -74,15 +79,35 @@ class MoviesViewModel(
         }
     }
 
+    private fun observeConnection() {
+        viewModelScope.launch {
+            connectivityObserver.isConnectedFlow.collectLatest { isConnected ->
+                _uiState.update { state ->
+                    if (state is MoviesUiState.Ready) {
+                        state.copy(
+                            data = state.data.copy(isConnected = isConnected)
+                        )
+                    } else {
+                        state
+                    }
+                }
+            }
+        }
+    }
+
     private fun loadData() {
-        _uiState.update {
-            MoviesUiState.Ready(
-                data = MoviesUiData(
-                    tabs = createTabs(),
-                    emptyText = "There are no items to display!",
-                    noLikesText = "You haven't liked any movie yet",
-                ),
-            )
+        viewModelScope.launch {
+            _uiState.update {
+                MoviesUiState.Ready(
+                    data = MoviesUiData(
+                        tabs = createTabs(),
+                        emptyText = "There are no items to display!",
+                        noLikesText = "You haven't liked any movie yet",
+                        noInternetText = "You don't have internet connection but we saved some movies for you ;)",
+                        isConnected = connectivityObserver.isConnectedFlow.firstOrNull() == true,
+                    ),
+                )
+            }
         }
     }
 
