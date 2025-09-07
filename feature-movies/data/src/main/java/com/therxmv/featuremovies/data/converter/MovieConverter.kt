@@ -13,7 +13,7 @@ class MovieConverter(
     private val posterUrlFactory: PosterUrlFactory,
 ) {
 
-    fun entityToModel(entity: MovieEntity): MovieModel =
+    fun entityToModel(entity: MovieEntity, isFavorite: Boolean = false): MovieModel =
         with(entity) {
             MovieModel(
                 id = id,
@@ -22,6 +22,7 @@ class MovieConverter(
                 posterUrl = posterUrlFactory.create(posterPath),
                 releaseDateMillis = releaseDateMillis,
                 averageVote = round(averageVote * 10) / 10,
+                isFavorite = isFavorite,
             )
         }
 

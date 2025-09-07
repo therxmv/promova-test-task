@@ -207,7 +207,7 @@ private fun MovieItemBigPreview() {
                     UiMovieItem.Movie.Action(
                         icon = Icons.Default.Star,
                         isEnabled = false,
-                        event = MoviesUiEvent.AddToFavorite(0),
+                        event = MoviesUiEvent.ToggleFavoriteMovie(0, true),
                     ),
                 ),
             ),
@@ -232,7 +232,7 @@ private fun MovieItemSmallPreview() {
                     UiMovieItem.Movie.Action(
                         icon = Icons.Default.Star,
                         isEnabled = false,
-                        event = MoviesUiEvent.AddToFavorite(0),
+                        event = MoviesUiEvent.ToggleFavoriteMovie(0, false),
                     ),
                 ),
             ),

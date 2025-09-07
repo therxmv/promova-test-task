@@ -5,8 +5,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 @Immutable
 data class MoviesUiData(
-    val tabs: List<String>,
-)
+    val tabs: List<Tab>,
+) {
+    sealed interface Tab {
+        val label: String
+
+        data class All(override val label: String) : Tab
+        data class Favorite(override val label: String) : Tab
+    }
+}
 
 sealed interface UiMovieItem {
 

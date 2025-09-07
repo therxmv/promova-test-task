@@ -13,6 +13,9 @@ interface MoviesDao {
     @Query("SELECT * FROM MoviesTable ORDER BY release_date_millis DESC")
     fun pagingSource(): PagingSource<Int, MovieEntity>
 
+    @Query("SELECT * FROM MoviesTable WHERE id IN (:ids) ORDER BY release_date_millis DESC")
+    suspend fun selectMoviesByIds(ids: List<Int>): List<MovieEntity>
+
     @Query("SELECT * FROM MoviesTable")
     suspend fun selectMovies(): List<MovieEntity>
 

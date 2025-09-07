@@ -20,6 +20,7 @@ fun MoviesScreen(
         is MoviesUiState.Ready -> MoviesContent(
             data = uiState.data,
             pagingMovies = pagingMovies,
+            favoriteMovies = viewModel.favoriteMoviesState,
             onEvent = viewModel::onEvent,
         )
 

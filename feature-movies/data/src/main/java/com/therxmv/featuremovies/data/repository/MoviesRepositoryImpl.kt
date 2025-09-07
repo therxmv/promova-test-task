@@ -7,13 +7,17 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.therxmv.featuremovies.data.converter.MovieConverter
 import com.therxmv.featuremovies.data.source.local.room.MoviesDatabase
+import com.therxmv.featuremovies.data.source.local.room.entity.FavoriteMovieEntity
 import com.therxmv.featuremovies.data.source.local.room.entity.MovieEntity
 import com.therxmv.featuremovies.data.source.paging.MoviesRemoteMediator
 import com.therxmv.featuremovies.data.source.remote.MoviesNetworkApi
 import com.therxmv.featuremovies.domain.model.MovieModel
 import com.therxmv.featuremovies.domain.repository.MoviesRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 
 @OptIn(ExperimentalPagingApi::class)
 class MoviesRepositoryImpl(
@@ -27,11 +31,38 @@ class MoviesRepositoryImpl(
     }
 
     private val moviesDao = moviesDatabase.getMoviesDao()
+    private val favoriteMoviesDao = moviesDatabase.getFavoriteMoviesDao()
 
-    override fun getMoviesPagerFlow(): Flow<PagingData<MovieModel>> {
-        return getMoviesPager().flow.map { data ->
-            data.map { movieConverter.entityToModel(it) }
-        }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getMoviesPagerFlow(): Flow<PagingData<MovieModel>> =
+        favoriteMoviesDao.selectFavoriteMovies()
+            .flatMapLatest { favorites ->
+                getMoviesPager().flow.map { data ->
+                    data.map { entity ->
+                        val isFavorite = favorites.find { it.movieId == entity.id } != null
+
+                        movieConverter.entityToModel(entity = entity, isFavorite = isFavorite)
+                    }
+                }
+            }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getFavoriteMoviesFlow(): Flow<List<MovieModel>> =
+        favoriteMoviesDao.selectFavoriteMovies()
+            .mapLatest { list ->
+                val ids = list.map { it.movieId }
+
+                moviesDao.selectMoviesByIds(ids).map { entity ->
+                    movieConverter.entityToModel(entity = entity, isFavorite = true)
+                }
+            }
+
+    override suspend fun addMovieToFavorites(id: Int) {
+        favoriteMoviesDao.insertFavoriteMovie(FavoriteMovieEntity(id))
+    }
+
+    override suspend fun removeMovieFromFavorites(id: Int) {
+        favoriteMoviesDao.deleteFavoriteMovie(id)
     }
 
     private fun getMoviesPager(): Pager<Int, MovieEntity> =
