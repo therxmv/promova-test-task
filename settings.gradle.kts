@@ -29,4 +29,5 @@ include(
     ":base:ui",
     ":base:date",
     ":base:navigation",
+    ":base:coroutines",
 )

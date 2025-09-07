@@ -13,16 +13,19 @@ import com.therxmv.featuremovies.data.source.paging.MoviesRemoteMediator
 import com.therxmv.featuremovies.data.source.remote.MoviesNetworkApi
 import com.therxmv.featuremovies.domain.model.MovieModel
 import com.therxmv.featuremovies.domain.repository.MoviesRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalPagingApi::class)
 class MoviesRepositoryImpl(
     private val moviesNetworkApi: MoviesNetworkApi,
     private val moviesDatabase: MoviesDatabase,
     private val movieConverter: MovieConverter,
+    private val defaultDispatcher: CoroutineDispatcher,
 ) : MoviesRepository {
 
     companion object {
@@ -35,8 +38,10 @@ class MoviesRepositoryImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMoviesPagerFlow(): Flow<PagingData<MovieModel>> =
         getMoviesPager().flow.map { data ->
-            data.map { entity ->
-                movieConverter.entityToModel(entity = entity)
+            withContext(defaultDispatcher) {
+                data.map { entity ->
+                    movieConverter.entityToModel(entity = entity)
+                }
             }
         }
 
@@ -44,8 +49,10 @@ class MoviesRepositoryImpl(
     override fun getFavoriteMoviesFlow(): Flow<List<MovieModel>> =
         favoriteMoviesDao.selectFavoriteMoviesEntities()
             .mapLatest { list ->
-                list.map { entity ->
-                    movieConverter.entityToModel(entity = entity, isFavorite = true)
+                withContext(defaultDispatcher) {
+                    list.map { entity ->
+                        movieConverter.entityToModel(entity = entity, isFavorite = true)
+                    }
                 }
             }
 
@@ -64,6 +71,7 @@ class MoviesRepositoryImpl(
                 moviesNetworkApi = moviesNetworkApi,
                 moviesDatabase = moviesDatabase,
                 movieConverter = movieConverter,
+                defaultDispatcher = defaultDispatcher,
             ),
         ) {
             moviesDao.pagingSource()

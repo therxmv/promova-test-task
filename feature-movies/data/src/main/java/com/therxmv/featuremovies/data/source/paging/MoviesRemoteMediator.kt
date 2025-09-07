@@ -9,12 +9,15 @@ import com.therxmv.featuremovies.data.converter.MovieConverter
 import com.therxmv.featuremovies.data.source.local.room.MoviesDatabase
 import com.therxmv.featuremovies.data.source.local.room.entity.MovieEntity
 import com.therxmv.featuremovies.data.source.remote.MoviesNetworkApi
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalPagingApi::class)
 class MoviesRemoteMediator(
     private val moviesNetworkApi: MoviesNetworkApi,
     private val moviesDatabase: MoviesDatabase,
     private val movieConverter: MovieConverter,
+    private val defaultDispatcher: CoroutineDispatcher,
 ) : RemoteMediator<Int, MovieEntity>() {
 
     companion object {
@@ -39,8 +42,12 @@ class MoviesRemoteMediator(
 
             val response = moviesNetworkApi.getMoviesByPage(page)
 
-            val entities = movieConverter.dtoToEntity(response.results)
-            val keys = movieConverter.responseToKeyEntity(response)
+            val entities = withContext(defaultDispatcher) {
+                movieConverter.dtoToEntity(response.results)
+            }
+            val keys = withContext(defaultDispatcher) {
+                movieConverter.responseToKeyEntity(response)
+            }
 
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {

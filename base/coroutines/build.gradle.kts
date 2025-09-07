@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.therxmv.featuremovies.domain"
+    namespace = "com.therxmv.base.coroutines"
     compileSdk = libs.versions.project.targetSdk.get().toInt()
 
     defaultConfig {
@@ -18,6 +18,7 @@ android {
 }
 
 dependencies {
-    api(project(":base:coroutines"))
-    api(libs.paging.common)
+    api(libs.bundles.coroutines)
+
+    implementation(libs.koin.core)
 }

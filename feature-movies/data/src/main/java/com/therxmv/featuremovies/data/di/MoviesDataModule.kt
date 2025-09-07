@@ -2,6 +2,7 @@ package com.therxmv.featuremovies.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.therxmv.base.coroutines.KoinDispatchers
 import com.therxmv.featuremovies.data.converter.MovieConverter
 import com.therxmv.featuremovies.data.converter.PosterUrlFactory
 import com.therxmv.featuremovies.data.repository.MoviesRepositoryImpl
@@ -11,6 +12,7 @@ import com.therxmv.featuremovies.data.source.remote.MoviesNetworkApi
 import com.therxmv.featuremovies.data.source.remote.MoviesNetworkClient
 import com.therxmv.featuremovies.domain.repository.MoviesRepository
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val moviesDataModule = module {
@@ -32,6 +34,7 @@ val moviesDataModule = module {
             moviesNetworkApi = get(),
             moviesDatabase = get(),
             movieConverter = get(),
+            defaultDispatcher = get(named(KoinDispatchers.Default)),
         )
     }
 }

@@ -20,6 +20,8 @@ import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiData
 import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiEvent
 import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiState
 import com.therxmv.featuremovies.ui.viewmodel.state.UiMovieItem
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MoviesViewModel(
     getMoviesPagerFlow: GetMoviesPagerFlowUseCase,
@@ -39,6 +42,8 @@ class MoviesViewModel(
     private val addFavoriteMovie: AddFavoriteMovieUseCase,
     private val removeFavoriteMovie: RemoveFavoriteMovieUseCase,
     private val connectivityObserver: ConnectivityObserver,
+    private val defaultDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Idle)
@@ -80,7 +85,7 @@ class MoviesViewModel(
     }
 
     private fun observeConnection() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler()) {
             connectivityObserver.isConnectedFlow.collectLatest { isConnected ->
                 _uiState.update { state ->
                     if (state is MoviesUiState.Ready) {
@@ -96,7 +101,9 @@ class MoviesViewModel(
     }
 
     private fun loadData() {
-        viewModelScope.launch {
+        viewModelScope.launch(
+            ioDispatcher + coroutineExceptionHandler { _uiState.update { MoviesUiState.Error } }
+        ) {
             _uiState.update {
                 MoviesUiState.Ready(
                     data = MoviesUiData(
@@ -112,7 +119,7 @@ class MoviesViewModel(
     }
 
     private fun toggleFavoriteMovie(movieId: Int, isFavorite: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(coroutineExceptionHandler()) {
             if (isFavorite) {
                 removeFavoriteMovie(movieId)
             } else {
@@ -120,6 +127,10 @@ class MoviesViewModel(
             }
         }
     }
+
+    private fun coroutineExceptionHandler(
+        onError: (Throwable) -> Unit = { it.printStackTrace() },
+    ): CoroutineExceptionHandler = CoroutineExceptionHandler { context, throwable -> onError(throwable) }
 
     private fun createTabs(): List<MoviesUiData.Tab> =
         listOf(
@@ -140,16 +151,18 @@ class MoviesViewModel(
             ),
         )
 
-    private fun MovieModel.mapToUiItem(): UiMovieItem =
-        UiMovieItem.Movie(
-            id = id,
-            title = title,
-            description = overview,
-            posterUrl = posterUrl,
-            averageScore = averageVote.toString(),
-            releaseDate = releaseDateMillis.formatToMonthAndYear(),
-            actions = getMovieActions(),
-        )
+    private suspend fun MovieModel.mapToUiItem(): UiMovieItem =
+        withContext(defaultDispatcher) {
+            UiMovieItem.Movie(
+                id = id,
+                title = title,
+                description = overview,
+                posterUrl = posterUrl,
+                averageScore = averageVote.toString(),
+                releaseDate = releaseDateMillis.formatToMonthAndYear(),
+                actions = getMovieActions(),
+            )
+        }
 
     private fun PagingData<UiMovieItem>.insertDateSeparators(): PagingData<UiMovieItem> =
         insertSeparators(TerminalSeparatorType.SOURCE_COMPLETE) { prev, next ->
