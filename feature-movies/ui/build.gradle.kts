@@ -25,6 +25,7 @@ android {
 dependencies {
     implementation(project(":feature-movies:domain"))
     implementation(project(":base:ui"))
+    implementation(project(":base:date"))
     implementation(project(":base:navigation"))
 
     implementation(libs.bundles.koin)
@@ -32,6 +33,7 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.paging.compose)
+    implementation(libs.bundles.coil)
 
     implementation(libs.bundles.viewModel)
 }

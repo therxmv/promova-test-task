@@ -1,38 +1,32 @@
 package com.therxmv.featuremovies.ui.content
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.therxmv.base.ui.state.ErrorContainer
+import com.therxmv.base.ui.state.LoadingContainer
 import com.therxmv.featuremovies.ui.viewmodel.MoviesViewModel
+import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesScreen(
     viewModel: MoviesViewModel = koinViewModel(),
 ) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val pagingMovies = viewModel.moviesFlow.collectAsLazyPagingItems()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
-        items(
-            count = pagingMovies.itemCount,
-        ) { index ->
-            val item = pagingMovies[index] ?: return@items
+    when (uiState) {
+        is MoviesUiState.Ready -> MoviesContent(
+            data = uiState.data,
+            pagingMovies = pagingMovies,
+            onEvent = viewModel::onEvent,
+        )
 
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp),
-                text = item.title,
-            )
-        }
+        MoviesUiState.Loading -> LoadingContainer()
+
+        MoviesUiState.Error -> ErrorContainer()
+
+        MoviesUiState.Idle -> Unit
     }
 }

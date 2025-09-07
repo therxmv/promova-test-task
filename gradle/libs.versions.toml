@@ -25,6 +25,7 @@ ktor = "3.2.3"
 koin = "4.1.1"
 paging = "3.3.6"
 datetime = "0.6.2"
+coil = "3.3.0"
 
 junit = "4.13.2"
 mockk = "1.14.5"
@@ -45,7 +46,7 @@ viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose",
 # Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
-compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 
 # Nav3
@@ -73,6 +74,8 @@ paging-common = { module = "androidx.paging:paging-common", version.ref = "pagin
 paging-compose = { module = "androidx.paging:paging-compose-android", version.ref = "paging" }
 
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 
 # Unit Tests
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -92,7 +95,7 @@ coroutines = [
 
 compose = [
     "compose-ui",
-    "compose-preview",
+    "compose-tooling",
     "compose-material3",
 ]
 
@@ -121,6 +124,11 @@ ktor = [
 koin = [
     "koin-core",
     "koin-compose",
+]
+
+coil = [
+    "coil",
+    "coil-network",
 ]
 
 test-unit = [
