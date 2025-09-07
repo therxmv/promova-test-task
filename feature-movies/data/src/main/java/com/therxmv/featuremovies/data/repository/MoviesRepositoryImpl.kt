@@ -15,7 +15,6 @@ import com.therxmv.featuremovies.domain.model.MovieModel
 import com.therxmv.featuremovies.domain.repository.MoviesRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 
@@ -35,16 +34,11 @@ class MoviesRepositoryImpl(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMoviesPagerFlow(): Flow<PagingData<MovieModel>> =
-        favoriteMoviesDao.selectFavoriteMovies()
-            .flatMapLatest { favorites ->
-                getMoviesPager().flow.map { data ->
-                    data.map { entity ->
-                        val isFavorite = favorites.find { it.movieId == entity.id } != null
-
-                        movieConverter.entityToModel(entity = entity, isFavorite = isFavorite)
-                    }
-                }
+        getMoviesPager().flow.map { data ->
+            data.map { entity ->
+                movieConverter.entityToModel(entity = entity)
             }
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFavoriteMoviesFlow(): Flow<List<MovieModel>> =

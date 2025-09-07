@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -39,18 +40,22 @@ class MoviesViewModel(
     private val _uiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Idle)
     val uiState = _uiState.asStateFlow()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val moviesFlow: Flow<PagingData<UiMovieItem>> = getMoviesPagerFlow()
-        .map { data ->
+        .cachedIn(viewModelScope)
+        .combine(getFavoriteMoviesFlow()) { data, favorites ->
             data
-                .mapToUiItems()
+                .map { movie ->
+                    val isFavorite = favorites.find { it.id == movie.id } != null
+                    movie.copy(isFavorite = isFavorite).mapToUiItem()
+                }
                 .insertDateSeparators()
         }
-        .cachedIn(viewModelScope)
 
     val favoriteMoviesState = getFavoriteMoviesFlow()
         .map { list ->
             list
-                .mapToUiItems()
+                .map { it.mapToUiItem() }
                 .insertDateSeparators()
         }
         .stateIn(
@@ -108,15 +113,6 @@ class MoviesViewModel(
             ),
         )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun PagingData<MovieModel>.mapToUiItems(): PagingData<UiMovieItem> =
-        map { it.mapToUiItem() }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun List<MovieModel>.mapToUiItems(): List<UiMovieItem> =
-        map { it.mapToUiItem() }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun MovieModel.mapToUiItem(): UiMovieItem =
         UiMovieItem.Movie(
             id = id,
