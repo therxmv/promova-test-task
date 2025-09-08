@@ -37,4 +37,6 @@ dependencies {
     implementation(libs.bundles.coil)
 
     implementation(libs.bundles.viewModel)
+
+    testImplementation(libs.bundles.test.unit)
 }

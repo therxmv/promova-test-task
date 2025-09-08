@@ -1,20 +1,28 @@
 package com.therxmv.featuremovies.data.repository
 
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
+import androidx.paging.Pager
+import androidx.paging.PagingData
 import com.therxmv.featuremovies.data.converter.MovieConverter
 import com.therxmv.featuremovies.data.createEntity
 import com.therxmv.featuremovies.data.source.local.room.MoviesDatabase
 import com.therxmv.featuremovies.data.source.local.room.dao.FavoriteMoviesDao
 import com.therxmv.featuremovies.data.source.local.room.dao.MoviesDao
 import com.therxmv.featuremovies.data.source.local.room.entity.FavoriteMovieEntity
+import com.therxmv.featuremovies.data.source.local.room.entity.MovieEntity
 import com.therxmv.featuremovies.data.source.remote.MoviesNetworkApi
 import com.therxmv.featuremovies.domain.model.MovieModel
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -28,7 +36,7 @@ class MoviesRepositoryImplTest {
     val mockNetworkApi = mockk<MoviesNetworkApi>()
     val mockMoviesDao = mockk<MoviesDao>(relaxed = true)
     val mockFavoriteDao = mockk<FavoriteMoviesDao>(relaxed = true)
-    val mockDatabase = mockk<MoviesDatabase> {
+    val mockDatabase = mockk<MoviesDatabase>(relaxed = true) {
         every { getMoviesDao() } returns mockMoviesDao
         every { getFavoriteMoviesDao() } returns mockFavoriteDao
     }
@@ -41,10 +49,26 @@ class MoviesRepositoryImplTest {
         defaultDispatcher = testDispatcher
     )
 
-//    @Test // TODO
-//    fun `it creates pager and returns converted paging data`() {
-//
-//    }
+    @Test
+    fun `it creates pager and returns converted paging data`() = testScope.runTest {
+        mockkConstructor(Pager::class)
+
+        val entity = createEntity()
+        every { anyConstructed<Pager<Int, MovieEntity>>().flow } returns flowOf(
+            PagingData.from(
+                data = listOf(entity),
+                sourceLoadStates = LoadStates(
+                    refresh = LoadState.NotLoading(false),
+                    append = LoadState.Loading,
+                    prepend = LoadState.NotLoading(false),
+                ),
+            )
+        )
+
+        val result = systemUnderTest.getMoviesPagerFlow().firstOrNull()
+
+        result.shouldNotBeNull()
+    }
 
     @Test
     fun `it returns mapped favorite movies`() = testScope.runTest {

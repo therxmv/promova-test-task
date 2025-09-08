@@ -22,6 +22,7 @@ import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiState
 import com.therxmv.featuremovies.ui.viewmodel.state.UiMovieItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -102,6 +103,9 @@ class MoviesViewModel(
         viewModelScope.launch(
             ioDispatcher + coroutineExceptionHandler { _uiState.update { MoviesUiState.Error } }
         ) {
+            _uiState.update { MoviesUiState.Loading }
+            delay(1000) // Intended delay to simulate data loading (e.g. translated strings)
+
             _uiState.update {
                 MoviesUiState.Ready(
                     data = MoviesUiData(

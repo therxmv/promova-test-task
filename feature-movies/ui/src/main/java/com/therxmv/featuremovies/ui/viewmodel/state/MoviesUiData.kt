@@ -9,7 +9,7 @@ data class MoviesUiData(
     val emptyText: String,
     val noLikesText: String,
     val noInternetText: String,
-    val isConnected: Boolean = true,
+    val isConnected: Boolean,
 ) {
     sealed interface Tab {
         val label: String
