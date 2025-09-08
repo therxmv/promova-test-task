@@ -103,6 +103,9 @@ fun PromovaTheme(
     )
 }
 
+/**
+ * Provides generic values. Should be used across whole project.
+ */
 object PromovaTheme {
 
     val paddings = Paddings()

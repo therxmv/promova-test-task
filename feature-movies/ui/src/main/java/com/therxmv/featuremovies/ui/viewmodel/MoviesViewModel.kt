@@ -108,7 +108,7 @@ class MoviesViewModel(
         }
     }
 
-    private fun loadData() {
+    fun loadData() {
         viewModelScope.launch(
             ioDispatcher + coroutineExceptionHandler { _uiState.update { MoviesUiState.Error } }
         ) {

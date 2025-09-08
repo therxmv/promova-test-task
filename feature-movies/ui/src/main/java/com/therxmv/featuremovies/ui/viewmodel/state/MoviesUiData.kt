@@ -3,6 +3,9 @@ package com.therxmv.featuremovies.ui.viewmodel.state
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/**
+ * Represents general data of entire screen.
+ */
 @Immutable
 data class MoviesUiData(
     val tabs: List<Tab>,
@@ -19,6 +22,9 @@ data class MoviesUiData(
     }
 }
 
+/**
+ * Represents all possible items of the list.
+ */
 sealed interface UiMovieItem {
 
     val id: Any

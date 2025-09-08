@@ -34,7 +34,7 @@ fun MoviesScreen(
 
         MoviesUiState.Loading -> LoadingContainer()
 
-        MoviesUiState.Error -> ErrorContainer()
+        MoviesUiState.Error -> ErrorContainer(onRetry = viewModel::loadData)
 
         MoviesUiState.Idle -> Unit
     }

@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalPagingApi::class)
+@OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
 class MoviesRepositoryImpl(
     private val moviesNetworkApi: MoviesNetworkApi,
     private val moviesDatabase: MoviesDatabase,
@@ -35,7 +35,6 @@ class MoviesRepositoryImpl(
     private val moviesDao = moviesDatabase.getMoviesDao()
     private val favoriteMoviesDao = moviesDatabase.getFavoriteMoviesDao()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMoviesPagerFlow(): Flow<PagingData<MovieModel>> =
         getMoviesPager().flow.map { data ->
             withContext(defaultDispatcher) {
@@ -45,7 +44,6 @@ class MoviesRepositoryImpl(
             }
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFavoriteMoviesFlow(): Flow<List<MovieModel>> =
         favoriteMoviesDao.selectFavoriteMoviesEntities()
             .mapLatest { list ->
