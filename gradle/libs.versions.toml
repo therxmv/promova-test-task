@@ -30,6 +30,7 @@ coil = "3.3.0"
 junit = "4.13.2"
 mockk = "1.14.5"
 kotest = "6.0.2"
+turbine = "1.2.0"
 
 [libraries]
 # AndroidX
@@ -83,6 +84,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotest = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 paging-testing = { module = "androidx.paging:paging-testing", version.ref = "paging" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
 androidx-core = [
@@ -139,6 +141,7 @@ test-unit = [
     "kotest",
     "coroutines-test",
     "paging-testing",
+    "turbine",
 ]
 
 [plugins]

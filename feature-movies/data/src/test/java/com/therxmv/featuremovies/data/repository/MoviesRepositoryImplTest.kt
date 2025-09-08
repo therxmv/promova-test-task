@@ -1,9 +1,8 @@
 package com.therxmv.featuremovies.data.repository
 
-import androidx.paging.LoadState
-import androidx.paging.LoadStates
 import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.testing.asSnapshot
 import com.therxmv.featuremovies.data.converter.MovieConverter
 import com.therxmv.featuremovies.data.createEntity
 import com.therxmv.featuremovies.data.source.local.room.MoviesDatabase
@@ -14,7 +13,7 @@ import com.therxmv.featuremovies.data.source.local.room.entity.MovieEntity
 import com.therxmv.featuremovies.data.source.remote.MoviesNetworkApi
 import com.therxmv.featuremovies.domain.model.MovieModel
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coVerify
 import io.mockk.every
@@ -22,7 +21,6 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -55,19 +53,15 @@ class MoviesRepositoryImplTest {
 
         val entity = createEntity()
         every { anyConstructed<Pager<Int, MovieEntity>>().flow } returns flowOf(
-            PagingData.from(
-                data = listOf(entity),
-                sourceLoadStates = LoadStates(
-                    refresh = LoadState.NotLoading(false),
-                    append = LoadState.Loading,
-                    prepend = LoadState.NotLoading(false),
-                ),
-            )
+            PagingData.from(listOf(entity))
         )
 
-        val result = systemUnderTest.getMoviesPagerFlow().firstOrNull()
+        val result = systemUnderTest.getMoviesPagerFlow().asSnapshot {
+            scrollTo(50)
+        }
 
-        result.shouldNotBeNull()
+        result shouldHaveSize 1
+        result.first().id shouldBe entity.id
     }
 
     @Test
