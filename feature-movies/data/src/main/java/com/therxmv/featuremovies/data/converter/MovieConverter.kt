@@ -22,7 +22,7 @@ class MovieConverter(
                 overview = overview,
                 posterUrl = posterUrlFactory.create(posterPath),
                 releaseDateMillis = releaseDateMillis,
-                averageVote = round(averageVote * 10) / 10,
+                averageVote = round(averageVote * 10) / 10, // 4.513 -> 4.5
                 isFavorite = isFavorite,
             )
         }

@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.therxmv.base.ui.theme.PromovaTheme
 import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiEvent
 import com.therxmv.featuremovies.ui.viewmodel.state.UiMovieItem
@@ -20,7 +20,7 @@ internal fun FavoriteMoviesTab(
     emptyText: String,
     onEvent: (MoviesUiEvent) -> Unit,
 ) {
-    val movies by favoriteMovies.collectAsState()
+    val movies by favoriteMovies.collectAsStateWithLifecycle()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),

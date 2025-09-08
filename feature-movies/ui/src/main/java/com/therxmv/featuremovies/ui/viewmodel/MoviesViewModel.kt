@@ -1,6 +1,7 @@
 package com.therxmv.featuremovies.ui.viewmodel
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,11 +18,13 @@ import com.therxmv.featuremovies.domain.usecase.GetFavoriteMoviesFlowUseCase
 import com.therxmv.featuremovies.domain.usecase.GetMoviesPagerFlowUseCase
 import com.therxmv.featuremovies.domain.usecase.RemoveFavoriteMovieUseCase
 import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiData
+import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiEffect
 import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiEvent
 import com.therxmv.featuremovies.ui.viewmodel.state.MoviesUiState
 import com.therxmv.featuremovies.ui.viewmodel.state.UiMovieItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +32,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -48,6 +52,9 @@ class MoviesViewModel(
 
     private val _uiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Idle)
     val uiState = _uiState.asStateFlow()
+
+    private val _uiEffect = Channel<MoviesUiEffect>()
+    val uiEffect = _uiEffect.consumeAsFlow()
 
     val moviesFlow: Flow<PagingData<UiMovieItem>> = getMoviesPagerFlow()
         .cachedIn(viewModelScope)
@@ -80,6 +87,8 @@ class MoviesViewModel(
     fun onEvent(event: MoviesUiEvent) {
         when (event) {
             is MoviesUiEvent.ToggleFavoriteMovie -> toggleFavoriteMovie(movieId = event.movieId, isFavorite = event.isFavorite)
+
+            is MoviesUiEvent.ShareMovie -> shareMovie(event.movie)
         }
     }
 
@@ -130,6 +139,14 @@ class MoviesViewModel(
         }
     }
 
+    private fun shareMovie(movie: MovieModel) {
+        viewModelScope.launch {
+            _uiEffect.send(
+                MoviesUiEffect.ShareMovieDetails(details = movie.toString())
+            )
+        }
+    }
+
     private fun coroutineExceptionHandler(
         onError: (Throwable) -> Unit = { it.printStackTrace() },
     ): CoroutineExceptionHandler = CoroutineExceptionHandler { context, throwable -> onError(throwable) }
@@ -142,6 +159,11 @@ class MoviesViewModel(
 
     private fun MovieModel.getMovieActions(): List<UiMovieItem.Movie.Action> =
         listOf(
+            UiMovieItem.Movie.Action(
+                icon = Icons.Default.Share,
+                isEnabled = true,
+                event = MoviesUiEvent.ShareMovie(movie = this),
+            ),
             UiMovieItem.Movie.Action(
                 icon = Icons.Default.Star,
                 isEnabled = isFavorite,
