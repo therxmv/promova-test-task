@@ -32,9 +32,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -54,7 +54,7 @@ class MoviesViewModel(
     val uiState = _uiState.asStateFlow()
 
     private val _uiEffect = Channel<MoviesUiEffect>()
-    val uiEffect = _uiEffect.consumeAsFlow()
+    val uiEffect = _uiEffect.receiveAsFlow()
 
     val moviesFlow: Flow<PagingData<UiMovieItem>> = getMoviesPagerFlow()
         .cachedIn(viewModelScope)
