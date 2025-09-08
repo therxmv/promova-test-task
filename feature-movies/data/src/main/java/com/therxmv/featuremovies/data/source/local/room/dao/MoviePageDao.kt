@@ -10,11 +10,11 @@ import com.therxmv.featuremovies.data.source.local.room.entity.MoviePageEntity
 interface MoviePageDao {
 
     @Query("SELECT * FROM MoviePageTable WHERE movie_id = :movieId")
-    suspend fun selectKeyById(movieId: Int): MoviePageEntity?
+    suspend fun selectPageById(movieId: Int): MoviePageEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertKeys(keys: List<MoviePageEntity>)
+    suspend fun insertPages(keys: List<MoviePageEntity>)
 
     @Query("DELETE FROM MoviePageTable")
-    suspend fun deleteKeys()
+    suspend fun deletePages()
 }

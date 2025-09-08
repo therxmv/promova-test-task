@@ -51,11 +51,11 @@ class MoviesRemoteMediator(
 
             moviesDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    moviePageDao.deleteKeys()
+                    moviePageDao.deletePages()
                     moviesDao.deleteMovies()
                 }
 
-                moviePageDao.insertKeys(keys)
+                moviePageDao.insertPages(keys)
                 moviesDao.insertMovies(entities)
             }
 
@@ -74,7 +74,7 @@ class MoviesRemoteMediator(
 
     private suspend fun PagingState<Int, MovieEntity>.resolveNextPage(): Int {
         val nextKey = lastItemOrNull()?.let { item ->
-            moviePageDao.selectKeyById(item.id)
+            moviePageDao.selectPageById(item.id)
         }?.nextPage
 
         return nextKey ?: (INITIAL_PAGE + 1)

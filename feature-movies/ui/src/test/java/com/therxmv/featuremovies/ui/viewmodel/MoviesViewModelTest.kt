@@ -36,8 +36,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class MoviesViewModelTest {
 
-    val testDispatcher = StandardTestDispatcher()
-    val testScope = TestScope(testDispatcher)
+    private val testDispatcher = StandardTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
 
     private val mockGetMoviesPagerFlow = mockk<GetMoviesPagerFlowUseCase> {
         every { this@mockk.invoke() } returns flowOf(

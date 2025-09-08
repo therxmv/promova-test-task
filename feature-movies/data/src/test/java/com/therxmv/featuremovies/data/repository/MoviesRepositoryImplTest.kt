@@ -30,22 +30,22 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class MoviesRepositoryImplTest {
-    val testDispatcher = StandardTestDispatcher()
-    val testScope = TestScope(testDispatcher)
+    private val testDispatcher = StandardTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
 
-    val mockNetworkApi = mockk<MoviesNetworkApi>()
-    val mockMoviesDao = mockk<MoviesDao>(relaxed = true)
-    val mockFavoriteDao = mockk<FavoriteMoviesDao>(relaxed = true)
-    val mockDatabase = mockk<MoviesDatabase>(relaxed = true) {
+    private val mockMoviesNetworkApi = mockk<MoviesNetworkApi>()
+    private val mockMoviesDao = mockk<MoviesDao>(relaxed = true)
+    private val mockFavoriteMoviesDao = mockk<FavoriteMoviesDao>(relaxed = true)
+    private val mockMoviesDatabase = mockk<MoviesDatabase>(relaxed = true) {
         every { getMoviesDao() } returns mockMoviesDao
-        every { getFavoriteMoviesDao() } returns mockFavoriteDao
+        every { getFavoriteMoviesDao() } returns mockFavoriteMoviesDao
     }
-    val mockConverter = mockk<MovieConverter>(relaxed = true)
+    private val mockMovieConverter = mockk<MovieConverter>(relaxed = true)
 
-    val systemUnderTest = MoviesRepositoryImpl(
-        moviesNetworkApi = mockNetworkApi,
-        moviesDatabase = mockDatabase,
-        movieConverter = mockConverter,
+    private val systemUnderTest = MoviesRepositoryImpl(
+        moviesNetworkApi = mockMoviesNetworkApi,
+        moviesDatabase = mockMoviesDatabase,
+        movieConverter = mockMovieConverter,
         defaultDispatcher = testDispatcher
     )
 
@@ -74,11 +74,11 @@ class MoviesRepositoryImplTest {
     fun `it returns mapped favorite movies`() = testScope.runTest {
         val entity = createEntity()
 
-        every { mockFavoriteDao.selectFavoriteMoviesEntities() } returns flowOf(listOf(entity))
+        every { mockFavoriteMoviesDao.selectFavoriteMoviesEntities() } returns flowOf(listOf(entity))
 
         val result = systemUnderTest.getFavoriteMoviesFlow().first()
 
-        verify(exactly = 1) { mockConverter.entityToModel(entity = entity, isFavorite = true) }
+        verify(exactly = 1) { mockMovieConverter.entityToModel(entity = entity, isFavorite = true) }
         result shouldHaveSize 1
         result.first().shouldBeInstanceOf<MovieModel>()
     }
@@ -87,13 +87,13 @@ class MoviesRepositoryImplTest {
     fun `it adds movie to favorites`() = testScope.runTest {
         systemUnderTest.addMovieToFavorites(0)
 
-        coVerify { mockFavoriteDao.insertFavoriteMovie(FavoriteMovieEntity(0)) }
+        coVerify { mockFavoriteMoviesDao.insertFavoriteMovie(FavoriteMovieEntity(0)) }
     }
 
     @Test
     fun `it removes movie from favorites`() = testScope.runTest {
         systemUnderTest.removeMovieFromFavorites(0)
 
-        coVerify { mockFavoriteDao.deleteFavoriteMovie(0) }
+        coVerify { mockFavoriteMoviesDao.deleteFavoriteMovie(0) }
     }
 }
